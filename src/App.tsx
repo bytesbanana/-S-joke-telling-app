@@ -1,5 +1,7 @@
-import React, { useEffect } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect } from "react";
 import { useJokeAPI } from "./hooks";
+import { Joke } from "./hooks/useJokeAPI";
 
 declare global {
   interface Window {
@@ -13,34 +15,38 @@ declare global {
 }
 
 function App() {
-  const { jokes, loading, fetchJoke } = useJokeAPI();
+  const { joke, loading, fetchJoke } = useJokeAPI();
 
-  const speak = (text: string): void => {
+  const tellJoke = (joke: Joke) => {
     const synth = window.speechSynthesis;
-    const utterThis = new SpeechSynthesisUtterance(text);
+    const setupUtter = new SpeechSynthesisUtterance(joke.setup);
+    const punchLineUtter = new SpeechSynthesisUtterance(joke.punchline);
 
-    synth.speak(utterThis);
+    synth.speak(setupUtter);
+
+    setupUtter.addEventListener("end", () => {
+      setTimeout(() => {
+        synth.speak(punchLineUtter);
+      });
+    });
   };
 
   useEffect(() => {
     if (loading) return;
-    if (!jokes) return;
+    if (!joke) return;
 
-    speak(jokes.setup);
-    setTimeout(() => {
-      speak(jokes.punchline);
-    }, 1500);
-  }, [jokes, loading]);
+    tellJoke(joke);
+  }, [joke, loading]);
 
   return (
-    <div className="flex justify-center p-10 flex-col">
-      <div className="w-auto h-auto min-h-[400px] bg-red-300">
-        Robot image here
+    <div className="flex justify-center p-20 flex-col items-center">
+      <div className=" relative w-[300px] h-auto">
+        <img src="/robot.png" alt="robot" />
       </div>
       <div className="flex justify-center p-4">
         <button
           disabled={loading}
-          className={`border w-fit p-2 rounded-md hover:shadow-gray-300 shadow hover:shadow-md transition-all bg-blue-500 border-blue-500 text-white font-semibold hover:bg-blue-700 active:scale-105 disabled:bg-gray-400`}
+          className={`border w-fit p-2 rounded-md hover:shadow-gray-300 shadow hover:shadow-lg transition-all border-black text-black text-4xl hover:bg-gray-700 hover:text-gray-200 active:scale-105 disabled:bg-gray-400`}
           onClick={() => {
             fetchJoke();
           }}
@@ -49,9 +55,9 @@ function App() {
         </button>
       </div>
 
-      <div className="w-100 bg-red-100 p-4 flex justify-center flex-col items-center">
-        <h1>{jokes?.setup}</h1>
-        <p>{jokes?.punchline}</p>
+      <div className="w-100 p-4 flex justify-center flex-col items-center">
+        <h1 className="text-5xl font-bold text-center p-4">{joke?.setup}</h1>
+        <p className="text-3xl text-center">{joke?.punchline}</p>
       </div>
     </div>
   );

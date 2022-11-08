@@ -7,7 +7,7 @@ export interface Joke {
   type: string;
 }
 const useJokeAPI = function () {
-  const [jokes, setJoke] = useState<Joke>();
+  const [joke, setJoke] = useState<Joke>();
   const [loading, setLoading] = useState(false);
 
   const fetchJoke = async () => {
@@ -25,7 +25,7 @@ const useJokeAPI = function () {
     }
   };
 
-  return { jokes, loading, fetchJoke };
+  return { joke, loading, fetchJoke };
 };
 
 export default useJokeAPI;
