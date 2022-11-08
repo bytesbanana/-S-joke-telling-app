@@ -16,9 +16,9 @@ declare global {
 
 function App() {
   const { joke, loading, fetchJoke } = useJokeAPI();
+  const synth = window.speechSynthesis;
 
   const tellJoke = (joke: Joke) => {
-    const synth = window.speechSynthesis;
     const setupUtter = new SpeechSynthesisUtterance(joke.setup);
     const punchLineUtter = new SpeechSynthesisUtterance(joke.punchline);
 
@@ -48,6 +48,7 @@ function App() {
           disabled={loading}
           className={`border w-fit p-2 rounded-md hover:shadow-gray-300 shadow hover:shadow-lg transition-all border-black text-black text-4xl hover:bg-gray-700 hover:text-gray-200 active:scale-105 disabled:bg-gray-400`}
           onClick={() => {
+            if (synth.speaking) synth.cancel();
             fetchJoke();
           }}
         >
