@@ -38,12 +38,25 @@ function App() {
     tellJoke(joke);
   }, [joke, loading]);
 
+  const onPressKeyListener = (keyboardEvent: KeyboardEvent) => {
+    if (keyboardEvent.key.toLowerCase() === "j") {
+      fetchJoke();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keypress", onPressKeyListener);
+    return () => {
+      window.removeEventListener("keypress", onPressKeyListener);
+    };
+  }, []);
+
   return (
     <div className="flex justify-center p-20 flex-col items-center">
       <div className=" relative w-[300px] h-auto">
         <img src="/robot.png" alt="robot" />
       </div>
-      <div className="flex justify-center p-4">
+      <div className="flex justify-center p-4 flex-col items-center">
         <button
           disabled={loading}
           className={`border w-fit p-2 rounded-md hover:shadow-gray-300 shadow hover:shadow-lg transition-all border-black text-black text-4xl hover:bg-gray-700 hover:text-gray-200 active:scale-105 disabled:bg-gray-400`}
@@ -54,6 +67,7 @@ function App() {
         >
           Tell me a joke
         </button>
+        <p className="text-2xl">Or press "J"</p>
       </div>
 
       <div className="w-100 p-4 flex justify-center flex-col items-center">
