@@ -52,8 +52,8 @@ function App() {
   }, []);
 
   return (
-    <div className="flex justify-center p-20 flex-col items-center">
-      <div className=" relative w-[300px] h-auto">
+    <div className="flex justify-center flex-col items-center">
+      <div className=" relative w-[300px] h-auto p-2">
         <img src="/robot.png" alt="robot" />
       </div>
       <div className="flex justify-center p-4 flex-col items-center">
@@ -70,7 +70,7 @@ function App() {
         <p className="text-2xl">Or press "J"</p>
       </div>
 
-      <div className="w-100 p-4 flex justify-center flex-col items-center">
+      <div className="w-100 p-4 flex justify-center flex-col items-center py-4">
         <h1 className="text-5xl font-bold text-center p-4">{joke?.setup}</h1>
         <p className="text-3xl text-center">{joke?.punchline}</p>
       </div>
